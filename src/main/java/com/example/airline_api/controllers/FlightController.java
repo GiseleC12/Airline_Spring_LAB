@@ -1,5 +1,6 @@
 package com.example.airline_api.controllers;
 
+import com.example.airline_api.models.BookingDTO;
 import com.example.airline_api.models.Flight;
 import com.example.airline_api.models.Passenger;
 import com.example.airline_api.repositories.FlightRepository;
@@ -37,25 +38,22 @@ public class FlightController {
 
     // Add details of a new flight
     @PostMapping
-    public ResponseEntity<Flight> addNewFlight(@RequestBody Flight flight){
+    public ResponseEntity<List<Flight>> addNewFlight(@RequestBody Flight flight){
         flightRepository.save(flight);
-        return new ResponseEntity<>(flight, HttpStatus.OK);
+        return new ResponseEntity<>(flightRepository.findAll(), HttpStatus.OK);
     }
 
-    // Book passenger on a flight
-//    @PatchMapping(value = "/{id}")
-//    public ResponseEntity<Long> addPassengerToFlight(
-//            @RequestBody Long passengerId,
-//            @PathVariable Long id){
-//        Flight flight = flightService.getFlightById(id).get();
-//        Booking booking = flightService.addPassengerToFlight(passengerId, id);
-//        return new ResponseEntity<>(boo, HttpStatus.OK)
-//    }
-//
-//    // Cancel flight
-//    @DeleteMapping(value = "/{id}")
-//    public ResponseEntity cancelFlight(){
-//        return null;
-//    }
-//
+   //  Book passenger on a flight
+    @PatchMapping(value = "/{id}")
+    public ResponseEntity<Flight> addPassengerToFlight(
+            @RequestBody BookingDTO bookingDTO,
+            @PathVariable Long id){
+        return new ResponseEntity<>(flightService.addPassengerToFlight(bookingDTO, id), HttpStatus.OK);
+    }
+
+    // Cancel flight
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Long> deleteFlight(@PathVariable Long id){
+        return new ResponseEntity<>(id, HttpStatus.OK);
+    }
 }
